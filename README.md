@@ -1,5 +1,6 @@
 # Screen_Drop-In
-Drop-In replacement for Screen when not using WindowsForms
+Drop-In replacement for Screen when not using WindowsForms (Compiled with .Net 5.0, C# 9.0, Nullable=enable).
+
 Based of WpfScreenHelper but slimmed down and static FromPoint returns null if no monitor is found
 
 #### Instance members:
