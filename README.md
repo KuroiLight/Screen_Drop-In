@@ -13,4 +13,7 @@ Based of WpfScreenHelper but slimmed down and static FromPoint returns null if n
 #### Static members:
 * Screen[] AllScreens
 * Screen PrimaryScreen
-* Screen? FromPoint()
+* Screen? FromPoint(Point)
+* Rectangle? GetBounds(Point/Rectangle)
+* Rectangle? GetWorkingArea(Point/Rectangle)
+* Screen? FromHandle(IntPtr)
