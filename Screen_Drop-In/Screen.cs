@@ -8,21 +8,10 @@ namespace Screen_Drop_In
 {
     public sealed class Screen : IEquatable<Screen>
     {
-        public static Screen[] AllScreens { get; }
-
-        public static Screen PrimaryScreen { get; }
-
-        public int BitsPerPixel { get; }
-        public Rectangle Bounds { get; }
-        public Rectangle WorkingArea { get; }
-        public string DeviceName { get; }
-        public bool Primary { get; }
-
-        private readonly IntPtr _monitorHandle;
-        private readonly IntPtr _monitorHdc;
-
         private static readonly int PRIMARYMON = 0x00000001;
         private static int i = 0;
+        private readonly IntPtr _monitorHandle;
+        private readonly IntPtr _monitorHdc;
 
         static Screen()
         {
@@ -33,13 +22,6 @@ namespace Screen_Drop_In
             MonitorEnumProc proc = MonEnumProc;
             bool res = EnumDisplayMonitors(href, IntPtr.Zero, proc, IntPtr.Zero);
             PrimaryScreen = AllScreens.First((S) => S.Primary);
-        }
-
-        private static bool MonEnumProc(IntPtr monitor, IntPtr hdc, IntPtr lprcMonitor, IntPtr lParam)
-        {
-            AllScreens[i] = new Screen(monitor, hdc);
-            i++;
-            return true;
         }
 
         private Screen(IntPtr ScrHandle, IntPtr HDC)
@@ -57,17 +39,67 @@ namespace Screen_Drop_In
             BitsPerPixel = GetDeviceCaps(HDC, 12);
         }
 
+        public static Screen[] AllScreens { get; }
+
+        public static Screen PrimaryScreen { get; }
+
+        public int BitsPerPixel { get; }
+
+        public Rectangle Bounds { get; }
+
+        public string DeviceName { get; }
+
+        public bool Primary { get; }
+
+        public Rectangle WorkingArea { get; }
+
+        public static Screen? FromHandle(IntPtr handle)
+        {
+            RECT _rect;
+            bool result = GetWindowRect(handle, out _rect);
+            if (!result) return null;
+
+            Point handlePt = new Point(_rect.Left, _rect.Top);
+            return FromPoint(handlePt);
+        }
+
         public static Screen? FromPoint(Point pt)
         {
-            for (int i = 0; i < AllScreens.Length; i++) {
+            for (int i = 0; i < AllScreens.Length; i++)
+            {
                 if (AllScreens[i].Bounds.Contains(pt)) return AllScreens[i];
             }
             return null;
         }
 
+        public static Screen? FromRectangle(Rectangle Rct)
+        {
+            return ScreenOfLargestPortion(Rct);
+        }
+
+        public static Rectangle? GetBounds(Point pt)
+        {
+            return FromPoint(pt)?.Bounds;
+        }
+
+        public static Rectangle? GetBounds(Rectangle Rct)
+        {
+            return ScreenOfLargestPortion(Rct)?.Bounds;
+        }
+
+        public static Rectangle? GetWorkingArea(Point pt)
+        {
+            return FromPoint(pt)?.WorkingArea;
+        }
+
+        public static Rectangle? GetWorkingArea(Rectangle Rct)
+        {
+            return ScreenOfLargestPortion(Rct)?.WorkingArea;
+        }
         public bool Equals(Screen? other)
         {
-            if (other is not null && other is Screen) {
+            if (other is not null && other is Screen)
+            {
                 return other._monitorHandle == _monitorHandle && other._monitorHdc == _monitorHdc;
             }
             return false;
@@ -75,7 +107,8 @@ namespace Screen_Drop_In
 
         public override bool Equals(object? obj)
         {
-            if (obj is not null && obj is Screen scr) {
+            if (obj is not null && obj is Screen scr)
+            {
                 return scr._monitorHandle == _monitorHandle && scr._monitorHdc == _monitorHdc;
             }
             return false;
@@ -89,6 +122,38 @@ namespace Screen_Drop_In
         public override string ToString()
         {
             return $"{_monitorHandle} - {_monitorHdc} - {DeviceName} Bounds{Bounds} WorkingArea{WorkingArea} BitsPerPixel:{BitsPerPixel}";
+        }
+
+        private static bool MonEnumProc(IntPtr monitor, IntPtr hdc, IntPtr lprcMonitor, IntPtr lParam)
+        {
+            AllScreens[i] = new Screen(monitor, hdc);
+            i++;
+            return true;
+        }
+
+        private static Screen? ScreenOfLargestPortion(Rectangle R)
+        {
+            int areaFromSize(Size s) => s.Width * s.Height;
+
+            Screen? scr = null;
+            Rectangle? rct = null;
+            foreach (var screen in AllScreens)
+            {
+                Rectangle _rct = Rectangle.Intersect(screen.Bounds, R);
+                if (_rct.IsEmpty) continue;
+                if (rct is not null && areaFromSize(_rct.Size) > areaFromSize(rct.Value.Size))
+                {
+                    rct = _rct;
+                    scr = screen;
+                }
+                if (rct is null)
+                {
+                    rct = _rct;
+                    scr = screen;
+                }
+            }
+
+            return scr;
         }
     }
 }

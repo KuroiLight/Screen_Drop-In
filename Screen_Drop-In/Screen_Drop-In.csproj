@@ -5,6 +5,12 @@
     <RootNamespace>Screen_Drop_In</RootNamespace>
     <LangVersion>9.0</LangVersion>
     <Nullable>enable</Nullable>
+    <Authors>KuroiLight</Authors>
+    <Copyright>MIT License, Copyright KuroiLight</Copyright>
+    <PackageProjectUrl>https://github.com/KuroiLight/Screen_Drop-In</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/KuroiLight/Screen_Drop-In</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
 </Project>

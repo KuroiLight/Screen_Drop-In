@@ -8,43 +8,46 @@ namespace Screen_Drop_In
     {
         public const int SM_CMONITORS = 80;
 
-        [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        [ResourceExposure(ResourceScope.None)]
-        public static extern bool GetMonitorInfo(HandleRef hmonitor, [In, Out] MONITORINFOEX info);
+        public static readonly HandleRef NullHandleRef = new(null, IntPtr.Zero);
+
+        public delegate bool MonitorEnumProc(IntPtr monitor, IntPtr hdc, IntPtr lprcMonitor, IntPtr lParam);
 
         [DllImport("user32.dll", ExactSpelling = true)]
         [ResourceExposure(ResourceScope.None)]
         public static extern bool EnumDisplayMonitors(HandleRef hdc, IntPtr rcClip, MonitorEnumProc lpfnEnum, IntPtr dwData);
 
-        [DllImport("user32.dll", ExactSpelling = true)]
+        [DllImport("user32.dll", ExactSpelling = true, CharSet = CharSet.Auto)]
         [ResourceExposure(ResourceScope.None)]
-        public static extern IntPtr MonitorFromWindow(HandleRef handle, int flags);
+        public static extern bool GetCursorPos([In, Out] POINT pt);
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr GetDC(HandleRef hWnd);
+
+        [DllImport("gdi32.dll")]
+        public static extern int GetDeviceCaps(IntPtr hdc, int nIndex);
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        [ResourceExposure(ResourceScope.None)]
+        public static extern bool GetMonitorInfo(HandleRef hmonitor, [In, Out] MONITORINFOEX info);
 
         [DllImport("user32.dll", ExactSpelling = true, CharSet = CharSet.Auto)]
         [ResourceExposure(ResourceScope.None)]
         public static extern int GetSystemMetrics(int nIndex);
 
-        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        [DllImport("user32.dll", SetLastError = true, ExactSpelling = true)]
         [ResourceExposure(ResourceScope.None)]
-        public static extern bool SystemParametersInfo(int nAction, int nParam, ref RECT rc, int nUpdate);
+        public static extern bool GetWindowRect(IntPtr hwnd, out RECT lpRect);
 
         [DllImport("user32.dll", ExactSpelling = true)]
         [ResourceExposure(ResourceScope.None)]
         public static extern IntPtr MonitorFromPoint(POINT pt, int flags);
-
-        [DllImport("user32.dll", ExactSpelling = true, CharSet = CharSet.Auto)]
+        [DllImport("user32.dll", ExactSpelling = true)]
         [ResourceExposure(ResourceScope.None)]
-        public static extern bool GetCursorPos([In, Out] POINT pt);
+        public static extern IntPtr MonitorFromWindow(HandleRef handle, int flags);
 
-        [DllImport("gdi32.dll")]
-        public static extern int GetDeviceCaps(IntPtr hdc, int nIndex);
-
-        [DllImport("user32.dll")]
-        public static extern IntPtr GetDC(HandleRef hWnd);
-
-        public static readonly HandleRef NullHandleRef = new(null, IntPtr.Zero);
-
-        public delegate bool MonitorEnumProc(IntPtr monitor, IntPtr hdc, IntPtr lprcMonitor, IntPtr lParam);
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        [ResourceExposure(ResourceScope.None)]
+        public static extern bool SystemParametersInfo(int nAction, int nParam, ref RECT rc, int nUpdate);
 
         [StructLayout(LayoutKind.Sequential)]
         public struct POINT
