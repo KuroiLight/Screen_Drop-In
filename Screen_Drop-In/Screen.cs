@@ -133,20 +133,24 @@ namespace Screen_Drop_In
 
         private static Screen? ScreenOfLargestPortion(Rectangle R)
         {
+            Rectangle absoluteRect(Rectangle r)
+            {
+                if (r.Width < 0)
+                    r = new Rectangle(r.X + r.Width, r.Y, Math.Abs(r.Width), r.Height);
+                if(r.Height < 0)
+                    r = new Rectangle(r.X, r.Y + r.Height, r.Width, Math.Abs(r.Height));
+                return r;
+            }
+
             int areaFromSize(Size s) => s.Width * s.Height;
 
             Screen? scr = null;
             Rectangle? rct = null;
             foreach (var screen in AllScreens)
             {
-                Rectangle _rct = Rectangle.Intersect(screen.Bounds, R);
+                Rectangle _rct = Rectangle.Intersect(screen.Bounds, absoluteRect(R));
                 if (_rct.IsEmpty) continue;
-                if (rct is not null && areaFromSize(_rct.Size) > areaFromSize(rct.Value.Size))
-                {
-                    rct = _rct;
-                    scr = screen;
-                }
-                if (rct is null)
+                if (rct is null || (areaFromSize(_rct.Size) > areaFromSize(rct.Value.Size)))
                 {
                     rct = _rct;
                     scr = screen;
