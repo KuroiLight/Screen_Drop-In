@@ -55,6 +55,8 @@ namespace Screen_Drop_In
 
         public static Screen? FromHandle(IntPtr handle)
         {
+            if (handle == IntPtr.Zero) return null;
+
             RECT _rect;
             bool result = GetWindowRect(handle, out _rect);
             if (!result) return null;
