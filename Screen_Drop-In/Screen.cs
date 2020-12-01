@@ -57,9 +57,8 @@ namespace Screen_Drop_In
         {
             if (handle == IntPtr.Zero) return null;
 
-            RECT _rect;
-            bool result = GetWindowRect(handle, out _rect);
-            if (!result) return null;
+            bool result = GetWindowRect(handle, out RECT _rect);
+            if (!result || _rect.IsEmpty) return null;
 
             Point handlePt = new Point(_rect.Left, _rect.Top);
             return FromPoint(handlePt);

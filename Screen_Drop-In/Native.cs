@@ -69,6 +69,8 @@ namespace Screen_Drop_In
             {
                 return new System.Drawing.Rectangle(Left, Top, Right - Left, Bottom - Top);
             }
+
+            public bool IsEmpty { get { return (Left == 0 && Top == 0 && Right == 0 && Bottom == 0);  } }
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto, Pack = 4)]
