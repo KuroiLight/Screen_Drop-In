@@ -65,12 +65,18 @@ namespace Screen_Drop_In
             return FromPoint(handlePt);
         }
 
-        public static Screen? FromPoint(Point pt)
+        public static Screen? FromPoint(Point pt, bool nearest = false)
         {
+            POINT PT = new POINT() { X = pt.X, Y = pt.Y };
+            IntPtr monitorHandle = MonitorFromPoint(PT, nearest ? 2 : 0);
+
+            if (monitorHandle == IntPtr.Zero) return null;
+
             for (int i = 0; i < AllScreens.Length; i++)
             {
-                if (AllScreens[i].Bounds.Contains(pt)) return AllScreens[i];
+                if (AllScreens[i]._monitorHandle == monitorHandle) return AllScreens[i];
             }
+
             return null;
         }
 
