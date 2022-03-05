@@ -1,5 +1,5 @@
 # Screen_Drop-In
-Drop-In replacement for Screen when not using WindowsForms (Compiled with .Net 5.0, C# 9.0, Nullable=enable).
+Drop-In replacement for Screen when not using WindowsForms (Compiled with .Net 7.0 preview, C# preview, Nullable=enable).
 
 Based of WpfScreenHelper but slimmed down and returns null (C# 9.0 nullables) when no match is found
 
