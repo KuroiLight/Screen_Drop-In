@@ -105,7 +105,7 @@ namespace Screen_Drop_In
         }
         public bool Equals(Screen? other)
         {
-            if (other is not null && other is Screen)
+            if (other is not null and Screen)
             {
                 return other._monitorHandle == _monitorHandle && other._monitorHdc == _monitorHdc;
             }
@@ -144,7 +144,7 @@ namespace Screen_Drop_In
             {
                 if (r.Width < 0)
                     r = new Rectangle(r.X + r.Width, r.Y, Math.Abs(r.Width), r.Height);
-                if(r.Height < 0)
+                if (r.Height < 0)
                     r = new Rectangle(r.X, r.Y + r.Height, r.Width, Math.Abs(r.Height));
                 return r;
             }
