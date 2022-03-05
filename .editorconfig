@@ -1,0 +1,7 @@
+﻿[*.cs]
+
+# IDE0090: Use 'new(...)'
+dotnet_diagnostic.IDE0090.severity = silent
+
+# RCS1032: Remove redundant parentheses.
+dotnet_diagnostic.RCS1032.severity = silent
