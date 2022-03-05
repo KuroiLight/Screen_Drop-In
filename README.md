@@ -17,3 +17,5 @@ Based of WpfScreenHelper but slimmed down and returns null (C# 9.0 nullables) wh
 * Rectangle? GetBounds(Point/Rectangle)
 * Rectangle? GetWorkingArea(Point/Rectangle)
 * Screen? FromHandle(IntPtr)
+
+### NuGet Package [Here](https://www.nuget.org/packages/Screen_Drop-In)
